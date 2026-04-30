@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agnent-woback
+  labels:
+    app: agnent-woback
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: agnent-woback
+  template:
+    metadata:
+      labels:
+        app: agnent-woback
+    spec:
+      containers:
+        - name: api
+          image: agnent-woback:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: agnent-woback-secret
+                  key: openai-api-key
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10

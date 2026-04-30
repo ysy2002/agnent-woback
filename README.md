@@ -20,6 +20,48 @@
 - **后端**：Python / FastAPI
 - **部署**：Docker + Kubernetes
 
+## 快速开始
+
+### 本地运行
+
+```bash
+# 1. 安装依赖
+pip install -r requirements.txt
+
+# 2. 配置环境变量
+cp .env.example .env
+# 编辑 .env，填写 OPENAI_API_KEY
+
+# 3. 启动服务
+uvicorn app.main:app --reload
+
+# 4. 运行测试
+pytest tests/
+```
+
+### Docker 运行
+
+```bash
+cp .env.example .env   # 填写 OPENAI_API_KEY
+docker compose up --build
+```
+
+### API 示例
+
+```bash
+# 处理工单
+curl -X POST http://localhost:8000/api/v1/tickets/reply \
+  -H "Content-Type: application/json" \
+  -d '{"ticket_id":"T001","user_id":"U001","content":"我想申请退款","history":[]}'
+
+# 提交满意度反馈
+curl -X POST http://localhost:8000/api/v1/tickets/feedback \
+  -H "Content-Type: application/json" \
+  -d '{"ticket_id":"T001","satisfied":true}'
+```
+
+交互式 API 文档：http://localhost:8000/docs
+
 ## 落地数据
 
 | 指标 | 优化前 | 优化后 |
